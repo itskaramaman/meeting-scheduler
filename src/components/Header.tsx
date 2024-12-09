@@ -7,7 +7,7 @@ import UserMenu from "./UserMenu";
 
 const Header = () => {
   return (
-    <nav className="px-6 py-4 flex justify-between items-center border-b-2 shadow-md">
+    <nav className="px-12 py-4 flex justify-between items-center border-b-2 shadow-md">
       <Link href="/">
         <Image src="/video.png" alt="logo" height={30} width={40} />
       </Link>
