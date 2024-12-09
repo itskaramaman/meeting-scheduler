@@ -4,8 +4,11 @@ import { Button } from "./ui/button";
 import { PenBox } from "lucide-react";
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import UserMenu from "./UserMenu";
+import { checkUser } from "@/lib/checkUser";
 
-const Header = () => {
+const Header = async () => {
+  await checkUser();
+
   return (
     <nav className="px-12 py-4 flex justify-between items-center border-b-2 shadow-md">
       <Link href="/">
