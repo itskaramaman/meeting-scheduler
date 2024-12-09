@@ -46,7 +46,7 @@ model Booking {
   eventId String
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
   userId String
-  user User @relation("UserBooking", fields: [userId], references: [id])
+  user User @relation("UserBookings", fields: [userId], references: [id])
   
   name String
   email String
