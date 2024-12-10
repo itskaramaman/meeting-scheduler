@@ -15,9 +15,11 @@ const Header = async () => {
         <Image src="/video.png" alt="logo" height={30} width={40} />
       </Link>
       <div className="flex items-center gap-5">
-        <Button className="flex items-center gap-2">
-          <PenBox /> Create Event
-        </Button>
+        <Link href="/events?create=true">
+          <Button className="flex items-center gap-2">
+            <PenBox /> Create Event
+          </Button>
+        </Link>
         <SignedOut>
           <SignInButton forceRedirectUrl="/dashboard">
             <Button asChild variant="outline">

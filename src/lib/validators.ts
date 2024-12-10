@@ -1,3 +1,4 @@
+import { title } from "process";
 import { z } from "zod";
 
 export const usernameSchema = z.object({
@@ -9,4 +10,20 @@ export const usernameSchema = z.object({
       /^[a-zA-Z0-9_]+$/,
       "Username can only contain letters, numbers or underscores"
     ),
+});
+
+export const eventSchema = z.object({
+  title: z
+    .string()
+    .min(1, "Title is required")
+    .max(100, "Title must be 100 characters or less"),
+
+  description: z
+    .string()
+    .min(1, "Description is required")
+    .max(500, "Description must be 500 charaters or less"),
+
+  duration: z.number().int().positive("Duration must be a positive integer"),
+
+  isPrivate: z.boolean(),
 });
