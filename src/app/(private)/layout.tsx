@@ -39,8 +39,34 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
             </ul>
           </nav>
         </aside>
+
+        <main className="flex-1 overflow-y-auto p-4 md:p-8">
+          <header className="flex justify-center mb-4">
+            <h2 className="text-5xl md:text-6xl pt-2 md:pt-0 text-center md:text-left bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+              {navItems.find((item) => item.href === pathname)?.lable ||
+                "Dashboard"}
+            </h2>
+          </header>
+          {children}
+          <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-md">
+            <ul className="flex justify-between items-center">
+              {navItems.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className={`flex flex-col items-center py-2 px-4 ${
+                      pathname === item.href ? "text-blue-600" : "text-gray-600"
+                    }`}
+                  >
+                    <item.icon className="h-5 w-5" />
+                    {item.lable}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </main>
       </div>
-      <main>{children}</main>
     </>
   );
 };
