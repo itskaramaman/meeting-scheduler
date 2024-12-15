@@ -31,3 +31,36 @@ export async function updateUsername(username: string) {
 
   return { success: true };
 }
+
+export async function getUserMeetings(username: string) {
+  try {
+    const { userId } = auth();
+    if (!userId) throw new Error("Unauthorized");
+
+    const dbUser = await db.user.findUnique({
+      where: { username },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        imageUrl: true,
+        events: {
+          where: { isPrivate: false },
+          orderBy: { createdAt: "desc" },
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            duration: true,
+            isPrivate: true,
+            _count: { select: { bookings: true } },
+          },
+        },
+      },
+    });
+
+    return dbUser;
+  } catch (error) {
+    console.error(error);
+  }
+}

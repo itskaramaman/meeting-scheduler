@@ -85,3 +85,24 @@ export async function deleteEvent(eventId: string) {
     return { success: false };
   }
 }
+
+export async function getEventById(eventId: string, username: string) {
+  try {
+    const event = db.event.findUnique({
+      where: { id: eventId, user: { username } },
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+            imageUrl: true,
+            username: true,
+          },
+        },
+      },
+    });
+    return event;
+  } catch (error) {
+    console.error(error);
+  }
+}
