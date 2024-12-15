@@ -1,4 +1,4 @@
-import { getEventById } from "@/actions/events";
+import { getEventAvailability, getEventById } from "@/actions/events";
 import { Suspense } from "react";
 import EventDetails from "@/components/EventDetails";
 import BookingForm from "@/components/BookingForm";
@@ -23,6 +23,7 @@ export async function generateMetadata({ params }: EventPageProps) {
 
 const EventPage = async ({ params }: EventPageProps) => {
   const event = await getEventById(params.eventId, params.username);
+  const availability = await getEventAvailability(params.eventId);
 
   if (!event) return notFound();
 
@@ -30,7 +31,7 @@ const EventPage = async ({ params }: EventPageProps) => {
     <div className="flex flex-col justify-center lg:flex-row px-4 py-8">
       <EventDetails event={event} />
       <Suspense fallback={<div>Loading Booking Form...</div>}>
-        <BookingForm />
+        <BookingForm event={event} availability={availability ?? []} />
       </Suspense>
     </div>
   );
