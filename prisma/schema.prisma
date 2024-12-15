@@ -17,7 +17,7 @@ model User{
 
   events Event[] @relation("UserEvents")
   bookings Booking[] @relation("UserBookings")
-  availibity Availablity?
+  availability Availability?
   
   createdAt DateTime @default(now())
   updateAt DateTime @updatedAt
@@ -60,7 +60,7 @@ model Booking {
   updatedAd DateTime @updatedAt
 }
 
-model Availablity {
+model Availability {
   id String @id @default(uuid())
   userId String @unique
   user User @relation(fields: [userId], references: [id])
@@ -80,7 +80,7 @@ model DayAvailability {
   startTime DateTime
   endTime DateTime
 
-  availablity Availablity @relation(fields: [avalabilityId], references: [id], onDelete: Cascade)
+  availability Availability @relation(fields: [avalabilityId], references: [id], onDelete: Cascade)
 }
 
 enum DayOfWeek {
