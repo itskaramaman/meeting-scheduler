@@ -1,4 +1,5 @@
-import { getEventAvailability, getEventById } from "@/actions/events";
+import { getEventById } from "@/actions/events";
+import { getAvailabilityByEventId } from "@/actions/availability";
 import { Suspense } from "react";
 import EventDetails from "@/components/EventDetails";
 import BookingForm from "@/components/BookingForm";
@@ -23,7 +24,8 @@ export async function generateMetadata({ params }: EventPageProps) {
 
 const EventPage = async ({ params }: EventPageProps) => {
   const event = await getEventById(params.eventId, params.username);
-  const availability = await getEventAvailability(params.eventId);
+  const availability = await getAvailabilityByEventId(params.eventId);
+  console.log("availability", availability);
 
   if (!event) return notFound();
 
