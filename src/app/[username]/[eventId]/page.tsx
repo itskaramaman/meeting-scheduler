@@ -30,7 +30,7 @@ const EventPage = async ({ params }: EventPageProps) => {
   if (!event) return notFound();
 
   return (
-    <div className="flex flex-col justify-center lg:flex-row px-4 py-8">
+    <div className="flex flex-col justify-center lg:flex-row px-4 py-8 gap-5">
       <EventDetails event={event} />
       <Suspense fallback={<div>Loading Booking Form...</div>}>
         <BookingForm event={event} availability={availability ?? []} />
