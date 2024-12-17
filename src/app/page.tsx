@@ -122,7 +122,7 @@ export default function Home() {
           Join thousands of professionals who trust Meeting Scheduler for
           efficient time management.
         </p>
-        <Link href="/">
+        <Link href="/dashboard">
           <Button variant="secondary" className="text-blue-600 mt-2">
             Start For Free <ArrowRight className="ml-2 h-5 w-5" />
           </Button>

@@ -3,7 +3,7 @@
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 
-export async function getMeetings(type: "upcoming" | "past") {
+export async function getDashboardActivities() {
   try {
     const { userId } = auth();
     if (!userId) throw new Error("Unauthorized");
@@ -12,21 +12,25 @@ export async function getMeetings(type: "upcoming" | "past") {
     if (!dbUser) throw new Error("User not found");
 
     const now = new Date();
-
-    const meetings = await db.booking.findMany({
-      where: {
-        userId: dbUser.id,
-        startTime: type === "upcoming" ? { gte: now } : { lt: now },
-      },
+    const upcomingMeetings = await db.booking.findMany({
+      where: { userId: dbUser.id, startTime: { gt: now } },
       include: {
-        event: { include: { user: { select: { name: true, email: true } } } },
+        event: {
+          select: {
+            title: true,
+            duration: true,
+          },
+        },
       },
       orderBy: {
-        startTime: type === "upcoming" ? "asc" : "desc",
+        startTime: "desc",
       },
+      take: 3,
     });
 
-    return meetings;
+    console.log(upcomingMeetings);
+
+    return upcomingMeetings;
   } catch (error) {
     console.error(error);
     return [];
