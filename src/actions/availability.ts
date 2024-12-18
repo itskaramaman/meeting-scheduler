@@ -164,7 +164,6 @@ export async function getAvailabilityByEventId(eventId: string) {
 
       if (dayAvailabilty) {
         const dateStr = format(date, "yyyy-MM-dd");
-        console.log(dateStr);
         const slots = generateAvailableTimeSlots(
           dayAvailabilty.startTime,
           dayAvailabilty.endTime,

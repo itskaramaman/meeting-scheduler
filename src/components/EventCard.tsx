@@ -32,7 +32,7 @@ type EventCardProps = {
 
 const EventCard = ({ event, username, isPublic = false }: EventCardProps) => {
   const [isCopied, setIsCopied] = useState(false);
-  const { loading, error, fn: fnDeleteEvent } = useFetch(deleteEvent);
+  const { loading, fn: fnDeleteEvent } = useFetch(deleteEvent);
   const router = useRouter();
 
   const handleDelete = async () => {
@@ -52,10 +52,16 @@ const EventCard = ({ event, username, isPublic = false }: EventCardProps) => {
     }
   };
 
-  const handleCardClick = (e) => {
-    if (e.target.tagName !== "BUTTON" && e.target.tagName !== "SVG") {
-      window?.open(`${window.location.origin}/${username}/${event.id}`),
-        "_blank";
+  const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (
+      e.target instanceof HTMLElement &&
+      e.target.tagName !== "BUTTON" &&
+      e.target.tagName !== "SVG"
+    ) {
+      window?.open(
+        `${window.location.origin}/${username}/${event.id}`,
+        "_blank"
+      );
     }
   };
 

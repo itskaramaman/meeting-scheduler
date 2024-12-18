@@ -28,8 +28,6 @@ export async function getDashboardActivities() {
       take: 3,
     });
 
-    console.log(upcomingMeetings);
-
     return upcomingMeetings;
   } catch (error) {
     console.error(error);

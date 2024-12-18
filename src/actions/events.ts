@@ -52,7 +52,7 @@ export async function getUserEvents() {
     return { events, username: dbUser.username };
   } catch (error) {
     console.error(error);
-    return { events: [], username: null };
+    return { events: [], username: "" };
   }
 }
 

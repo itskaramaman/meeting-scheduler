@@ -38,7 +38,6 @@ export default function AvailabilityForm({ initialData }) {
   } = useFetch(updateAvailability);
 
   const onSubmit = async (data) => {
-    console.log(data);
     await fnupdateAvailability(data);
   };
 

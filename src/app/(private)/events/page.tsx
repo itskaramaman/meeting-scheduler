@@ -14,7 +14,7 @@ const EventsPage = async () => {
         <EventCard
           key={event.id}
           event={event}
-          username={username!!}
+          username={username}
           isPublic={false}
         />
       ))}

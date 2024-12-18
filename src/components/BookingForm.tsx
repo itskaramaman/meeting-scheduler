@@ -69,7 +69,7 @@ const BookingForm = ({ event, availability }: BookingFormProps) => {
     }
   }, [selectedTime]);
 
-  const { loading, error, data, fn: fnCreateBooking } = useFetch(createBooking);
+  const { loading, data, fn: fnCreateBooking } = useFetch(createBooking);
 
   const handleFormSubmit: SubmitHandler<z.infer<typeof bookingSchema>> = async (
     data

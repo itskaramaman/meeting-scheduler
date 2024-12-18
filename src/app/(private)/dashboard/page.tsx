@@ -5,13 +5,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useUser } from "@clerk/nextjs";
 import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usernameSchema } from "@/lib/validators";
 import useFetch from "@/hooks/useFetch";
 import { updateUsername } from "@/actions/users";
 import { BarLoader } from "react-spinners";
 import { getDashboardActivities } from "@/actions/dashboard";
+import { z } from "zod";
 
 const Dashboard = () => {
   const { isLoaded, user } = useUser();
@@ -32,10 +33,11 @@ const Dashboard = () => {
   const { loading, error, fn: fnUpdateUsername } = useFetch(updateUsername);
   const {
     loading: dashboardActivitiesLoading,
-    error: dashboardActivitiesError,
     fn: fnGetDashboardActivities,
     data: dashboardData,
   } = useFetch(getDashboardActivities);
+  type DashboardDataType = Awaited<ReturnType<typeof getDashboardActivities>>;
+  const typedDashboardData: DashboardDataType = dashboardData;
 
   useEffect(() => {
     const fetchDashboardActivites = async () => {
@@ -44,7 +46,9 @@ const Dashboard = () => {
     fetchDashboardActivites();
   }, []);
 
-  const onSubmit = async (data: { username: string }) => {
+  const onSubmit: SubmitHandler<z.infer<typeof usernameSchema>> = async (data: {
+    username: string;
+  }) => {
     fnUpdateUsername(data.username);
   };
 
@@ -60,7 +64,7 @@ const Dashboard = () => {
           ) : (
             dashboardData && (
               <ul>
-                {dashboardData.map((activity) => (
+                {typedDashboardData.map((activity) => (
                   <a
                     key={activity.id}
                     className="hover:underline hover:text-blue-500"
@@ -78,23 +82,6 @@ const Dashboard = () => {
           )}
         </CardContent>
       </Card>
-
-      {/* 
-      {
-    id: 'd0f7f7a5-b393-4abb-9607-76ff97c8e12a',
-    eventId: 'dfe4859f-9d05-4a7c-a118-3a5f79bb38b6',
-    userId: 'a46a4840-2f07-4095-b5aa-2949b9442a31',
-    name: 'test',
-    email: 'test@gmail.com',
-    additionalInfo: '',
-    startTime: 2024-12-18T19:00:00.000Z,
-    endTime: 2024-12-18T19:30:00.000Z,
-    meetLink: 'https://meet.google.com/exq-drsq-kor',
-    googleEventId: 'hrtbiffm4tg4m2oca8b7eqn14k',
-    createdAt: 2024-12-16T20:37:46.268Z,
-    updatedAd: 2024-12-16T20:37:46.268Z,
-    event: { title: 'First Public Event' }
-  } */}
 
       <Card>
         <CardHeader>

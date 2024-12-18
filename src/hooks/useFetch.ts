@@ -1,11 +1,15 @@
 import { useState } from "react";
 
-const useFetch = (cb) => {
-  const [data, setData] = useState(undefined);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+type UseFetchCallback<T, Args extends unknown[]> = (
+  ...args: Args
+) => Promise<T>;
 
-  const fn = async (...args: any[]) => {
+const useFetch = <T, Args extends unknown[]>(cb: UseFetchCallback<T, Args>) => {
+  const [data, setData] = useState<T | undefined>(undefined);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<unknown | null>(null);
+
+  const fn = async (...args: Args) => {
     setLoading(true);
     setError(null);
 
@@ -13,7 +17,7 @@ const useFetch = (cb) => {
       const response = await cb(...args);
       setData(response);
       setError(null);
-    } catch (error: any) {
+    } catch (error: unknown) {
       setError(error);
     } finally {
       setLoading(false);
