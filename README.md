@@ -77,10 +77,11 @@ The application is built with the following technologies:
    Create a `.env` file in the root directory and add the following variables:
 
    ```env
-   GOOGLE_CLIENT_ID=<your-google-client-id>
-   GOOGLE_CLIENT_SECRET=<your-google-client-secret>
-   NEXT_PUBLIC_CLERK_FRONTEND_API=<your-clerk-frontend-api>
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-key>
+   CLERK_SECRET_KEY=<your-clerk-secret>
    DATABASE_URL=<your-database-url>
+   NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+   NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
    ```
 
 4. Set up the database:
