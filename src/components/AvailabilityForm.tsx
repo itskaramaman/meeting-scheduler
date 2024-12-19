@@ -18,7 +18,7 @@ import { availabilitySchema, AvailabilitySchemaType } from "@/lib/validators";
 import { timeSlots } from "@/app/(private)/availability/data";
 import useFetch from "@/hooks/useFetch";
 
-// @ts-expect-error: Ignored for build
+
 export default function AvailabilityForm({ initialData }) {
   const {
     register,
@@ -27,7 +27,7 @@ export default function AvailabilityForm({ initialData }) {
     watch,
     setValue,
     formState: { errors },
-  } = useForm({
+  } = useForm<AvailabilitySchemaType>({
     resolver: zodResolver(availabilitySchema),
     defaultValues: { ...initialData },
   });
@@ -38,8 +38,8 @@ export default function AvailabilityForm({ initialData }) {
     fn: fnupdateAvailability,
   } = useFetch(updateAvailability);
 
-  
-  const onSubmit = async (data) => {
+  const onSubmit: SubmitHandler<AvailabilitySchemaType> = async (data) => {
+    // @ts-expect-error: for build
     await fnupdateAvailability(data);
   };
 
