@@ -8,7 +8,7 @@ type MeetingProp = {
   userId: string;
   name: string;
   email: string;
-  additionalInfo: string;
+  additionalInfo: string | null;
   startTime: Date;
   endTime: Date;
   meetLink: string;
@@ -39,7 +39,7 @@ const MeetingList = ({
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {meetings.map((meeting) => (
-        <MeetingCard key={meeting.id} meeting={meeting} type={type} />
+        <MeetingCard key={meeting.id} meeting={meeting} />
       ))}
     </div>
   );

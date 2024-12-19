@@ -7,12 +7,11 @@ import { useUser } from "@clerk/nextjs";
 import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { usernameSchema } from "@/lib/validators";
+import { usernameSchema, UsernameSchemaType } from "@/lib/validators";
 import useFetch from "@/hooks/useFetch";
 import { updateUsername } from "@/actions/users";
 import { BarLoader } from "react-spinners";
 import { getDashboardActivities } from "@/actions/dashboard";
-import { z } from "zod";
 
 const Dashboard = () => {
   const { isLoaded, user } = useUser();
@@ -22,22 +21,25 @@ const Dashboard = () => {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm({
+  } = useForm<UsernameSchemaType>({
     resolver: zodResolver(usernameSchema),
   });
 
   useEffect(() => {
-    setValue("username", user?.username);
+    if(user?.username) {
+      setValue("username", user.username);
+    }
+   
   }, [isLoaded]);
 
-  const { loading, error, fn: fnUpdateUsername } = useFetch(updateUsername);
+  const { loading, fn: fnUpdateUsername } = useFetch(updateUsername);
   const {
     loading: dashboardActivitiesLoading,
     fn: fnGetDashboardActivities,
     data: dashboardData,
   } = useFetch(getDashboardActivities);
   type DashboardDataType = Awaited<ReturnType<typeof getDashboardActivities>>;
-  const typedDashboardData: DashboardDataType = dashboardData;
+  const typedDashboardData: DashboardDataType = dashboardData ?? [];
 
   useEffect(() => {
     const fetchDashboardActivites = async () => {
@@ -46,9 +48,7 @@ const Dashboard = () => {
     fetchDashboardActivites();
   }, []);
 
-  const onSubmit: SubmitHandler<z.infer<typeof usernameSchema>> = async (data: {
-    username: string;
-  }) => {
+  const onSubmit: SubmitHandler<UsernameSchemaType> = async (data) => {
     fnUpdateUsername(data.username);
   };
 
@@ -98,9 +98,6 @@ const Dashboard = () => {
                 <p className="text-red-500 text-sm mt-1">
                   {errors?.username?.message as string}
                 </p>
-              )}
-              {error && (
-                <p className="text-red-500 text-sm mt-1">{error?.message}</p>
               )}
             </div>
             {loading && (

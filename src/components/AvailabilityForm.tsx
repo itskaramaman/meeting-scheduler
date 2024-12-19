@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,10 +14,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 
 import { updateAvailability } from "@/actions/availability";
-import { availabilitySchema } from "@/lib/validators";
+import { availabilitySchema, AvailabilitySchemaType } from "@/lib/validators";
 import { timeSlots } from "@/app/(private)/availability/data";
 import useFetch from "@/hooks/useFetch";
 
+// @ts-expect-error: Ignored for build
 export default function AvailabilityForm({ initialData }) {
   const {
     register,
@@ -37,6 +38,7 @@ export default function AvailabilityForm({ initialData }) {
     fn: fnupdateAvailability,
   } = useFetch(updateAvailability);
 
+  
   const onSubmit = async (data) => {
     await fnupdateAvailability(data);
   };

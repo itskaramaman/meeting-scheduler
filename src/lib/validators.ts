@@ -11,6 +11,8 @@ export const usernameSchema = z.object({
     ),
 });
 
+export type UsernameSchemaType = z.infer<typeof usernameSchema>;
+
 export const eventSchema = z.object({
   title: z
     .string()
@@ -60,6 +62,8 @@ export const availabilitySchema = z.object({
   sunday: daySchema,
   timeGap: z.number().min(0, "Time gap must be 0 or more minutes").int(),
 });
+
+export type AvailabilitySchemaType = z.infer<typeof availabilitySchema>
 
 export const bookingSchema = z.object({
   name: z.string().min(1, "Name is required"),

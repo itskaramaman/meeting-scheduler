@@ -67,7 +67,18 @@ export async function getUserAvailability() {
   return availabilityData;
 }
 
-export async function updateAvailability(data) {
+
+type DayOfWeek = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY';
+
+type DaysAvailability = Record<DayOfWeek, {isAvailable: boolean, startTime: string, endTime: string}>
+
+// Define the final type using an intersection to add `timeGap`
+interface UpdateAvailabilityData extends DaysAvailability {
+  timeGap: number; // Static property for timeGap
+}
+
+
+export async function updateAvailability(data: UpdateAvailabilityData) {
   const { userId } = auth();
   if (!userId) throw new Error("Unauthorized");
 
@@ -104,6 +115,7 @@ export async function updateAvailability(data) {
         timeGap: data.timeGap,
         days: {
           deleteMany: {},
+          // @ts-expect-error: This line is necessary because we're manually mapping a string to an enum
           create: availabilityData,
         },
       },
@@ -114,6 +126,7 @@ export async function updateAvailability(data) {
         userId: dbUser.id,
         timeGap: data.timeGap,
         days: {
+          // @ts-expect-error: This line is necessary because we're manually mapping a string to an enum
           create: availabilityData,
         },
       },
@@ -187,7 +200,10 @@ function generateAvailableTimeSlots(
   startTime: Date,
   endTime: Date,
   duration: number,
-  bookings,
+  bookings: {
+    startTime: Date;
+    endTime: Date;
+  }[],
   dateStr: string,
   timeGap: number
 ) {
@@ -195,6 +211,7 @@ function generateAvailableTimeSlots(
   let currentTime = parseISO(
     `${dateStr}T${startTime.toISOString().slice(11, 16)}`
   );
+
 
   const slotEndTime = parseISO(
     `${dateStr}T${endTime.toISOString().slice(11, 16)}`

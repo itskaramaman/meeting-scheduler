@@ -4,7 +4,7 @@ import { db } from "@/lib/prisma";
 import { bookingSchema } from "@/lib/validators";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { z } from "zod";
-import { google } from "googleapis";
+import { google, calendar_v3 } from "googleapis";
 
 type BookingDataType = z.infer<typeof bookingSchema> & {
   eventId: string;
@@ -40,14 +40,14 @@ export async function createBooking(bookingData: BookingDataType) {
 
     const calender = google.calendar({ version: "v3", auth: oauth2Client });
 
-    const meetResponse = await calender.events.insert({
+    const meetResponse = await (calender.events.insert as (params: calendar_v3.Params$Resource$Events$Insert) => Promise<unknown>)({
       calendarId: "primary",
       conferenceDataVersion: 1,
       requestBody: {
         summary: `${bookingData.name} - ${event.title}`,
         description: bookingData.additionalInfo,
-        start: { dateTime: bookingData.startTime },
-        end: { dateTime: bookingData.endTime },
+        start: { dateTime: bookingData.startTime.toISOString() },
+        end: { dateTime: bookingData.endTime.toISOString() },
         attendees: [{ email: bookingData.email }, { email: event.user.email }],
         conferenceData: {
           createRequest: { requestId: `${event.id}-${Date.now()}` },
@@ -55,7 +55,9 @@ export async function createBooking(bookingData: BookingDataType) {
       },
     });
 
+    // @ts-expect-error: TS error from external lib
     const meetLink = meetResponse?.data?.hangoutLink;
+    // @ts-expect-error: TS error from external lib
     const googleEventId = meetResponse.data.id;
 
     const booking = await db.booking.create({

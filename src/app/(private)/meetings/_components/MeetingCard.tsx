@@ -20,7 +20,7 @@ type MeetingProp = {
   userId: string;
   name: string;
   email: string;
-  additionalInfo: string;
+  additionalInfo: string | null;
   startTime: Date;
   endTime: Date;
   meetLink: string;
